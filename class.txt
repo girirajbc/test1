@@ -1,0 +1,81 @@
+First create Dockerfile
+
+$ docker build . -t image_name
+
+$ docker run -d -p 8000:80 --name container_name image_name
+
+To check the docker containers
+$ docker ps
+$ docker ps -a
+
+To check the docker images
+$ docker images
+$ docker images -a
+
+TO enter the container
+$ docker exec -it container_name bash
+
+To remove docker container
+$ docker rm container_name
+
+To remove docker images
+$ docker rmi image_name
+
+Remove all exited containers
+List:
+$ docker ps -a -f status=exited
+Remove:
+$ docker rm $(docker ps -a -f status=exited -q)
+
+To remove all docker images
+$ docker images -a
+$ docker rmi $(docker images -a -q)
+
+
+To create a docker container through docker-compose
+- Create a docker-compose.yml file
+
+Sample:
+version: '3.8'
+
+# Services
+services:
+
+  # Nginx Service
+  nginx:
+    image: nginx:1.21
+    ports:
+      - 8090:80
+    volumes:
+      - ./src:/var/www/php
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php
+
+  # PHP Service
+  php:
+    image: php:8.0-fpm
+    working_dir: /var/www/php
+    volumes:
+      - ./src:/var/www/php/
+      
+
+- Create folder and files used for persistant volume
+In our case, we created src and ./docker/nginx/conf.d directory
+
+
+To start the container through docker compose
+$ docker-compose up -d
+
+To stop the container through docker compose
+$ docker-compose stop
+
+To check the status of container through docker compose
+$ docker-compose ps
+
+To check the docker images through docker compose
+$ docker-compose images
+
+
+
+
